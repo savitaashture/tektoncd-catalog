@@ -27,7 +27,6 @@ jobs:
   generate-experimental-catalog:
     needs: experimental-catalog-matrix
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
     strategy:
       matrix: ${{fromJSON(needs.experimental-catalog-matrix.outputs.matrix)}}
     steps:
