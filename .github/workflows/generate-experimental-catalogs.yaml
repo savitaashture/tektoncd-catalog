@@ -4,8 +4,8 @@
 name: generate-experimental-catalogs
 
 on:
-  workflow_dispatch:
-    # allow manual triggering
+  push:
+    branches: [ main ]
 
 jobs:
 
