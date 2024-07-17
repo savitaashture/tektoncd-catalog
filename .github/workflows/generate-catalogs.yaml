@@ -13,12 +13,12 @@ jobs:
 
   catalog-matrix:
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    if: github.repository_owner == 'savitaashture' # do not run this elsewhere
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - uses: openshift-pipelines/catalog-cd/actions/setup-catalog-cd@main
+      - uses: savitaashture/catalog-cd/actions/setup-catalog-cd@main
       - id: set-matrix
         name: Generate catalog matrix
         run: |
@@ -30,19 +30,19 @@ jobs:
   generate-catalog:
     needs: catalog-matrix
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'openshift-pipelines' # do not run this elsewhere
+    if: github.repository_owner == 'savitaashture' # do not run this elsewhere
     strategy:
       matrix: ${{fromJSON(needs.catalog-matrix.outputs.matrix)}}
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - uses: openshift-pipelines/catalog-cd/actions/setup-catalog-cd@main
+      - uses: savitaashture/catalog-cd/actions/setup-catalog-cd@main
       - name: ${{ matrix.type }} catalog for ${{ matrix.name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -Eeu
 
-          mkdir -p stable/tasks stable/pipelines
+          mkdir -p stable/tasks stable/pipelines stable/stepactions
           cp -fRv tasks/* stable/tasks
           cp -fRv pipelines/* stable/pipelines
           catalog-cd catalog generate-from \
@@ -54,7 +54,7 @@ jobs:
       - name: Checkout "p" publish branch
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
         with:
-          repository: openshift-pipelines/tektoncd-catalog
+          repository: savitaashture/tektoncd-catalog
           ref: p
           path: p
       - name: Copy "partial" catalog ${{ matrix.name }} in publish branch
@@ -69,7 +69,7 @@ jobs:
           CHANGES=$(git status -s)
           if [[ -n "${CHANGES}" ]]; then
             git status
-            git add tasks pipelines
+            git add tasks pipelines stepactions
             git commit -m "${{ matrix.name }}: Auto-update tekton ${{ matrix.type }} resources\n\nURL: ${{ matrix.url }}\\nIgnoredVersions: ${{ matrix.ignoreVersions }}"
             git pull --rebase --autostash
           else
@@ -95,3 +95,4 @@ jobs:
           name: ${{ matrix.name }}-${{ matrix.type }}-stable-catalog-artifact
           path: p/
           retention-days: 3 # We don't need to keep them for long
+
