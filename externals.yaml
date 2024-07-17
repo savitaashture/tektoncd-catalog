@@ -1,26 +1,6 @@
 repositories:
-- url: https://github.com/openshift-pipelines/task-git
+- url: https://github.com/savitaashture/task-git
   types:
   - tasks
   - pipelines
-- url: https://github.com/openshift-pipelines/task-maven
-  types:
-  - tasks
-  - pipelines
-- url: https://github.com/openshift-pipelines/task-openshift
-  types:
-  - tasks
-  - pipelines
-- url: https://github.com/openshift-pipelines/task-containers
-  types:
-  - tasks
-  - pipelines
-  ignore-versions: [ "v0.1.0" ]
-- url: https://github.com/openshift-pipelines/task-buildpacks
-  types:
-  - tasks
-  - pipelines
-- url: https://github.com/openshift-virtualization/openshift-virtualization-pipelines-tasks
-  types:
-  - tasks
-  - pipelines
+  - stepactions
